@@ -1,0 +1,70 @@
+<!--page de base à partir de laquelle toutes les autres sont construites-->
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    {% block title %}
+    <title>Boarding Games Rental</title>
+    {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <!-- Add additional CSS in static file -->
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/app.css' %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static '/public/favicon.ico' %}" />
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <div class="container-fluid main-block">
+        {% block navbar %}
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid navigation-bar">
+                <a href="{% url 'main' %}" class="navbar-brand">
+                    <img id="killer-logo" alt="logo du killer" src="{% static 'images/logo.png' %}"
+                        width=65 height=65 />
+                </a>
+                <button type="button" class="navbar-toggler navbar-dark" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="{% url 'main2' %}" class="nav-link">Item 1</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% endblock %}
+        <div class="container-fluid">
+
+            {% if success_message %}
+            <div class="alert alert-success alert-dismissible fade show">
+                <strong>Succès !</strong> {{success_message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            {% if error_message %}
+            <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Erreur !</strong> {{ error_message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+            {% block content %}
+            <div class="container-lg content-container">
+                <p>Lorem Ipsum Dolor Sit Amet</p>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+    <script src="{% static '/JavaScript/bootstrap.js' %}"></script>
+</body>
+
+</html>

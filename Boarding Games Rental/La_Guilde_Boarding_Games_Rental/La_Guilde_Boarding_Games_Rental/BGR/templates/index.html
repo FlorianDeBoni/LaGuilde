@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %} {% block content %}
+
+<div class="container-lg content-container">
+    <h1>Hello World!</h1>
+    <p>Welcome to my first Django project!</p>
+</br>
+    <form action="http://127.0.0.1:8000/url2" method="post">
+        {% csrf_token %}
+        {{form}}
+        <button class="btn pretty-button" type="submit">
+            Test
+        </button>
+    </form>
+</div>
+
+{% endblock %}

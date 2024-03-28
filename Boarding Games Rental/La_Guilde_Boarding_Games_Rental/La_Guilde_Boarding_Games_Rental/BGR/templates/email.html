@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="stylesheet" href="{{ css_url }}"/>
+</head>
+<body>
+    <form action="http://127.0.0.1:8000/url2" method="post">
+        {% csrf_token %}
+        {{form}}
+        <input type="text" name="data_name" value="Default Value" style="display: none;">
+
+        <button class="btn pretty-button" type="submit">
+            Test
+        </button>
+    </form>
+</body>
+</html>

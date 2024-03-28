@@ -1,0 +1,32 @@
+@media (max-width: 990px) {
+    body {
+        background-image: url("/static/images/1080_1920\ site.png");
+        color: #000000;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+}
+
+@media (min-width: 991px) {
+    body {
+        background-image: url("/static/images/1920_1080_site.png");
+        color: #000000;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
