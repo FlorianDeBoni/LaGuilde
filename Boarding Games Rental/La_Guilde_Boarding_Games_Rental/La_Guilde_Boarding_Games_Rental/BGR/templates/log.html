@@ -1,0 +1,56 @@
+{% extends "base_generic.html" %} 
+{% block content %}
+
+<style>
+  .input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .input-container input[type="password"] {
+    width: calc(75% - 110px); /* Adjust the width as needed */
+  }
+
+  .eye-icon {
+    cursor: pointer;
+    padding: 8px;
+    background-color: #ccc;
+  }
+</style>
+
+<div class="container-lg content-container classic-text">
+  <h1>Please log in to your account:</h1>
+<div class="content-container" style="width:700px;">
+  <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+      <div>
+          <label for="email" style="display: inline-block; width: 100px;">Email:</label>
+          <input type="email" id="email" name="email" placeholder="something@example.com" style="width: calc(75% - 110px);" size="30" min="10" max="100" value="{{email}}" required />
+      <br>
+      <br>
+          <label for="password" style="display: inline-block; width: 100px;margin-left:40px;">Password:</label>
+          <input type="password" id="password" name="password" placeholder="Length must be at least 5" minlength="5" maxlength="20" style="width: calc(75% - 110px);" value="{{password}}"required/>
+          {%load static%}
+          <img id="eye" class="eye-icon" onclick="togglePasswordVisibility()" style="background:white;" src="{% static 'images/invisible.png'%}" width=40 height=40/>
+      </div>
+      <br>
+      <button class="btn pretty-button" type="submit"> Log in </button>
+  </form>
+</div>
+
+<script>
+function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    var eyeIcon = document.getElementById("eye");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.src = "../static/images/visible.png";
+    } else {
+        passwordInput.type = "password";
+        eyeIcon.src = "../static/images/invisible.png"
+    }
+}
+</script>
+
+{% endblock %}

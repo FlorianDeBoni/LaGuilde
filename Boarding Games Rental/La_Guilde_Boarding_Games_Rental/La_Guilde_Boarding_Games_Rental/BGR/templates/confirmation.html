@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %} {% block content %}
+
+<div class="container-lg content-container classic-text">
+    <h1>An email has been sent to {{email}}</h1>
+    <h3>Please check your mails and enter the 4 digits password you received:</h3>
+</br>
+<form action="{% url 'confirm_email' %}" method="post">
+    {% csrf_token %}
+    <input name="email" type="hidden" value="{{email}}">
+    <input name="password" type="hidden" value="{{password}}">
+
+    <input name="code1" min="0" max="9" maxlength="1" type="hidden" value="{{code1}}">
+    <input name="code2" type="hidden" value="{{code2}}">
+    <input name="code3" type="hidden" value="{{code3}}">
+    <input name="code4" type="hidden" value="{{code4}}">
+
+    <input name="Entry1" type="number" placeholder="0" maxlength="1" value="{{Entry1}}" required/>
+    -
+    <input name="Entry2" type="number" placeholder="0" maxlength="1" value="{{Entry2}}" required/>
+    -
+    <input name="Entry3" type="number" placeholder="0" maxlength="1" value="{{Entry3}}" required/>
+    -
+    <input name="Entry4" type="number" placeholder="0" maxlength="1" value="{{Entry4}}" required/>
+    <br>
+    <br>
+    <button class="btn pretty-button" type="submit">Verify</button>
+</form>
+</div>
+
+{% endblock %}

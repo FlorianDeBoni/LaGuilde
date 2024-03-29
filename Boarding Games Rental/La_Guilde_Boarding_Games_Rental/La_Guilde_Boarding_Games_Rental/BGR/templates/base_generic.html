@@ -1,7 +1,7 @@
 <!--page de base à partir de laquelle toutes les autres sont construites-->
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     {% block title %}
@@ -37,6 +37,35 @@
                         <li class="nav-item">
                             <a href="{% url 'main2' %}" class="nav-link">Item 1</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{% url 'main2' %}" class="nav-link">Item 2</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link">
+                                Log out
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="nav-link">
+                                Log in
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'sign in' %}" class="nav-link">
+                                Sign up
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a href="{% url 'main2' %}" class="nav-link">
+                                Language <img src="{% static 'images/us.svg' %}"
+                                width=30 height=30 />
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -46,14 +75,14 @@
 
             {% if success_message %}
             <div class="alert alert-success alert-dismissible fade show">
-                <strong>Succès !</strong> {{success_message}}
+                <strong>Success !</strong> {{success_message}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             {% endif %}
 
             {% if error_message %}
             <div class="alert alert-danger alert-dismissible fade show">
-                <strong>Erreur !</strong> {{ error_message }}
+                <strong>Error !</strong> {{ error_message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             {% endif %}
