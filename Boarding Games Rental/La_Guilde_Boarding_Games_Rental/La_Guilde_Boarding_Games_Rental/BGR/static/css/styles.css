@@ -22,6 +22,10 @@ a.nav-link:hover {
     background-color: #444444;
 }
 
+.container-fluid.main-block {
+    padding-top: 65px;
+}
+
 .content-container {
     background-color: #ffffff;
     font-size: 14px;
@@ -98,4 +102,54 @@ p.titlebox {
 
 ul {
     list-style-type: none;
+}
+
+.coolinput {
+    display: flex-table;
+    width: fit-content;
+    position: static;
+    max-width: 240px;
+}
+
+.coolinput label.text {
+    font-size: 0.75rem;
+    color: black;
+    font-weight: 700;
+    position: relative;
+    top: 0.5rem;
+    padding: 0 3px;
+    background: white;
+    width: fit-content;
+}
+
+.coolinput input[type=email].input {
+    padding: 11px 10px;
+    font-size: 0.75rem;
+    border: 2px black solid;
+    border-radius: 5px;
+    background: white;
+}
+
+.coolinput input[type=password].input {
+    padding: 11px 10px;
+    font-size: 0.75rem;
+    border: 2px black solid;
+    border-radius: 5px;
+    background: white;
+}
+
+.coolinput input[type=text].input {
+    padding: 11px 10px;
+    font-size: 0.75rem;
+    border: 2px black solid;
+    border-radius: 5px;
+    background: white;
+}
+
+.coolinput input[type=email].input:focus {
+    outline: none;
+}
+
+.coolinput input[type=password].input:focus {
+    outline: none;
 }

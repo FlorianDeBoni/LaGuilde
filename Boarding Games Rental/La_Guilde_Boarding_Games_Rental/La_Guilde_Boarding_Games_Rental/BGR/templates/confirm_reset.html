@@ -4,7 +4,7 @@
     <h1>An email has been sent to {{email}}</h1>
     <h3>Please check your mails and enter the 4 digits password you received:</h3>
 </br>
-<form action="{% url 'confirm_email' %}" style="font-size:45px;" method="post">
+<form action="{% url 'confirm_reset' %}" style="font-size:45px;" method="post">
     {% csrf_token %}
     <input name="email" type="hidden" value="{{email}}">
     <input name="password" type="hidden" value="{{password}}">

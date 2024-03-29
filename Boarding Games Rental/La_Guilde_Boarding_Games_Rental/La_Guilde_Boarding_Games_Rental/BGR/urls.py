@@ -7,6 +7,10 @@ urlpatterns = [
     path('login', view_index.connect, name='login'),
     path('signIn', view_index.create_account, name='sign in'),
     path('confirm_email', view_index.verify_email, name="confirm_email"),
-    path('url2', view_index.index2, name='main2'),
+    path('reset', view_index.reset, name="reset"),
+    path('confirm_reset', view_index.confirm_reset, name="confirm_reset"),
 
+
+    path('test', view_index.test, name="test"),
+    path('test2', view_index.test2, name="test2"),
 ]
