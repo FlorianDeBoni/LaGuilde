@@ -24,7 +24,7 @@
 
 <div class="container-lg content-container classic-text">
   <h1>Please create an account:</h1>
-  <div class="content-container" style="width:700px; position: relative;display: flex;flex-direction: column; align-items: center;">
+  <div class="content-container" style="width:calc(70%); position: relative;display: flex;flex-direction: column; align-items: center;">
     <form action="{% url 'sign in' %}" method="post">
       {% csrf_token %}
         <div class="coolinput">

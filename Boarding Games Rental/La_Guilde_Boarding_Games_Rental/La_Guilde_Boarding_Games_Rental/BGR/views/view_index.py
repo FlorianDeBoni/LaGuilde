@@ -9,10 +9,32 @@ if 'makemigrations' not in sys.argv and 'migrate' not in sys.argv:
     from ..forms import *
 from django.core.mail import send_mail
 from django.contrib.auth import login, get_user_model, logout, authenticate
+from ..models import *
 
 
 def index(request):
-    return render(request, "index.html", context={})
+    if request.method == "POST":
+        post_request = request.POST
+        game = Game.objects.get(name=post_request['game_name'])
+        if post_request['is_checked'] == 'false':
+            game.favorites.remove(request.user)
+            game.save()
+        else:
+            game.favorites.add(request.user)
+            game.save()
+
+    games = Game.objects.filter(new=True)
+    dico = []
+    for game in games:
+        genres = list(game.genre.all())
+        infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+            game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+        if len(genres) >= 2:
+            infos["genre2"] = genres[1]
+            if len(genres) >= 3:
+                infos["genre3"] = genres[2]
+        dico.append(infos)
+    return render(request, "index.html", context={"elements": dico})
 
 
 def disconnect(request):

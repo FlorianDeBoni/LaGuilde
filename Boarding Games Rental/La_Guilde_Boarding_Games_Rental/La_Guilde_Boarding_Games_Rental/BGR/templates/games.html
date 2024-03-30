@@ -1,4 +1,5 @@
-{% extends "base_generic.html" %} {% block content %}
+{% extends "base_generic.html" %}
+{% block content %}
 
 <style>
     .heart-container {
@@ -99,7 +100,6 @@
         padding: 5px;
         font-size: 12px;
     }
-
 </style>
 
 <script>
@@ -153,17 +153,7 @@
 </script>
 
 <div class="container-lg content-container">
-    <h1 style="text-align:center;">La Guilde Boarding Games Rental</h1>
-</br>
-</br>
-    <p>Welcome to our Rental system. Please register first to borrow some of our boarding games.
-        With more than 400 different games, you will probably find some games that you will enjoy.
-    </br> 
-        For any specific queries, please contact us with Whatsapp <strong>(phone_number)</strong> or Telegram <strong>(@Telegram)</strong>.
-</br>
-<div class="content-container">
-    <h1 style="text-align:center;">Our new games</h1>
-
+    <h1 style="text-align:center;">Our games</h1>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6">
         {% for element in elements %}
 
@@ -242,9 +232,6 @@
         </div>
     </div>
     {% endfor %}
-
-
-</div>
 </div>
 
 {% endblock %}
