@@ -1,0 +1,99 @@
+{% extends "base_generic.html" %} 
+{% block content %}
+
+<div class="container-lg content-container">
+    <h1 style="text-align:center;">Borrow a game</h1>
+    <br>
+    <br>
+
+    <form id="game-form" style="text-align: center;" action="{% url 'borrow' %}" method="post">
+        {% csrf_token %}
+        <div id="form-container">
+            <!-- Initial field rendered by Django -->
+            {% for game in games %}
+            <div class="input-with-btn">
+                <div class="form-group">
+                    {{ game.games }}
+                </div>
+                <button class="delete-btn pretty-btn" style="margin-top:3px; position:relative;">❌</button>
+            </div>
+            {%endfor%}
+        </div>
+
+        <!-- Button to add more fields -->
+        <button id="add-field-btn" class="pretty-btn" style="margin-top:5px;">➕</button>
+        
+        <!-- Other form elements -->
+        <br><br>
+        From {{ form.datestart }} to {{ form.dateend }}
+        <br><br>
+        Your contact or extra queries:
+        <br>
+        {{ form.infos }}
+        <br><br>
+        <button type="submit" class="btn pretty-button">
+        {% if wait %}
+            Update borrow
+        </button>
+        <a href="{% url 'fav' %}">
+            <button type="button" class="btn pretty-button">Add to favorites</button>
+        </a>
+        {%else%}
+            Borrow
+        </button>
+        {% endif %}
+        
+        {% if is_active %}
+        <a href="{% url 'delete' %}">
+            <button type="button" class="btn pretty-button">Cancel</button>
+        </a>
+        {%endif%}
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const formContainer = document.getElementById('form-container');
+    const addFieldBtn = document.getElementById('add-field-btn');
+    let fieldCounter = 1;
+
+    function createField() {
+        const newField = document.createElement('div');
+        newField.classList.add('input-with-btn');
+        newField.innerHTML = `
+            <div class="form-group">
+                {{ form.games }}
+            </div>
+            <button class="delete-btn pretty-btn" style="margin-top:3px; position:relative;">❌</button>
+        `;
+        formContainer.appendChild(newField);
+        fieldCounter++;
+    }
+
+    addFieldBtn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent form submission
+        createField();
+    });
+
+    formContainer.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-btn')) {
+            event.stopPropagation(); // Prevent the click event from reaching the add button
+            event.target.parentElement.remove();
+        }
+    });
+});
+</script>
+
+<style>
+.input-with-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center horizontally */
+}
+
+.input-with-btn input {
+    margin-top: 3px;
+}
+</style>
+
+{% endblock %}

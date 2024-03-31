@@ -7,9 +7,9 @@ from .managers import CustomUserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(("email address"), unique=True)
-    contact = models.CharField(blank=True, max_length=200, help_text="Contact")
-    language_pref_en = models.BooleanField(blank=True,
-                                           default=True, help_text="English is prefered language")
+    contact = models.TextField(blank=True, max_length=200, help_text="Contact")
+    language_pref_fr = models.BooleanField(blank=True,
+                                           default=False, help_text="English is prefered language")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -65,15 +65,20 @@ class Game(models.Model):
 
 class Command(models.Model):
 
+    message_id = models.IntegerField(default=0)
+
+    wait = models.BooleanField(
+        default=False, help_text="Is the command waiting a validation")
     is_active = models.BooleanField(
         default=False, help_text="Is the command active")
     commander = models.ForeignKey(
         User, on_delete=models.CASCADE, help_text="Who did the command")
-    message_id = models.IntegerField(help_text="Command and bot message id")
     games = models.ManyToManyField(
-        Game, help_text="Command content")
-    start_date = models.DateField(help_text="When the command should start")
-    end_date = models.DateField(help_text="When the command should end")
+        Game, blank=True, help_text="Command content")
+    start_date = models.DateField(default=None, null=True,
+                                  blank=True, help_text="When the command should start")
+    end_date = models.DateField(default=None, null=True,
+                                blank=True, help_text="When the command should end")
 
     def __str__(self):
         return self.commander.email

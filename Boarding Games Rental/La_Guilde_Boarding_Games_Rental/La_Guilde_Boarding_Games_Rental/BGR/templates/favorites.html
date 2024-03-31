@@ -153,16 +153,9 @@
 </script>
 
 <div class="container-lg content-container">
-    <h1 style="text-align:center;">La Guilde Boarding Games Rental</h1>
-</br>
-</br>
-    <p>Welcome to our Rental system. Please register first to borrow some of our boarding games.
-        With more than 400 different games, you will probably find some games that you will enjoy.
-    </br> 
-        For any specific queries, please contact us with Whatsapp <strong>(phone_number)</strong> or Telegram <strong>(@Telegram)</strong>.
-</br>
+    <h1 style="text-align:center;">Your favorite games</h1>
+
 <div class="content-container">
-    <h1 style="text-align:center;">Our new games</h1>
 
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6">
         {% for element in elements %}
@@ -181,12 +174,12 @@
                             <font size="-0.5">{{ element.game.name }}</font>
                             <br>
                             {% if element.not_available %}
-                            <div style="font-size:15px; margin-top:10px;">
-                            (NOT AVAILABLE)
-                            {% else %}
-                            <div style="font-size:10px; margin-top:10px;">
-                            (AVAILABLE)
-                            {% endif %}
+                                <div style="font-size:15px; margin-top:10px;">
+                                (NOT AVAILABLE)
+                                {% else %}
+                                <div style="font-size:10px; margin-top:10px;">
+                                (AVAILABLE)
+                                {% endif %}
                             </div>
                         </h5>
                         <div style="font-size:15px;">
@@ -248,8 +241,37 @@
 
         {% endfor %}
 
+    </div>
+    </div>
 
-</div>
+
+    <h1 style="text-align:center;"> Your favorite commands </h1>
+    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-2">
+        {% for fav, favcom in games %}
+        <div class="container" style="font-size:20px;border:solid;margin-top:20px; display: flex; flex-direction: column;">
+        </br>
+            {% for game in fav %}
+                <strong>· {{game}}</strong><br>
+            {% endfor %}
+            <!-- Use flexbox properties to center the button horizontally and align it at the bottom -->
+            <div style="margin-top: auto;margin-bottom:5px; display: flex; justify-content: center;">
+                    <a href="{% url 'command' favcom.id %}">
+                        <button type="button" class="btn pretty-button">Command</button>
+                    </a>
+                    <!-- Add a margin to create a gap between the buttons -->
+                    <a href="{% url 'erase' favcom.id %}" style="margin-left: 10px;">
+                        <button type="button" class="btn pretty-button">❌</button>
+                    </a>
+            </br>
+            </div>
+        </div>
+        <br> <!-- Move this after the end of the container -->
+        {% endfor %}
+    </div>
+    
+
+
+
 </div>
 
 {% endblock %}

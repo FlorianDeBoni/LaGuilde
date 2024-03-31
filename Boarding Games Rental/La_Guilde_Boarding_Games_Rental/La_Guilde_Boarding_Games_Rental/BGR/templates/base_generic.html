@@ -1,11 +1,10 @@
 <!--page de base à partir de laquelle toutes les autres sont construites-->
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     {% block title %}
-    <title>Boarding Games Rental</title>
+    <title>La Guilde</title>
     {% endblock %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,14 +36,32 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="{% url 'games' %}" class="nav-link">Our games 🎲</a>
+                            <a href="{% url 'games' %}" class="nav-link">
+                                {%if user.language_pref_fr %}
+                                Nos jeux 🎲
+                                {%else%}
+                                Our games 🎲
+                                {%endif%}
+                            </a>
                         </li>
                         {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a href="{% url 'main' %}" class="nav-link">Borrow 🫴</a>
+                            <a href="{% url 'borrow' %}" class="nav-link">
+                                {%if user.language_pref_fr%}
+                                Emprunt 🫴
+                                {%else%}
+                                Borrow 🫴
+                                {%endif%}
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'main' %}" class="nav-link">Favorites ❤️</a>
+                            <a href="{% url 'favorites' %}" class="nav-link">
+                                {%if user.language_pref_fr %}
+                                Favoris ❤️
+                                {%else%}
+                                Favorites ❤️
+                                {%endif%}
+                            </a>
                         </li>
                         {% endif %}
                     </ul>
@@ -59,27 +76,45 @@
                         {% endif %}
                         <li class="nav-item">
                             <a href="{% url 'logout' %}" class="nav-link">
+                                {%if user.language_pref_fr %}
+                                Déconnexion
+                                {%else%}
                                 Log out
+                                {%endif%}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'change' %}" class="nav-link">
+                                {%if user.language_pref_fr %}
+                                Langue <img src="{% static 'images/fr.svg' %}"
+                                width=30 height=30 />
+                                {%else%}
+                                Language <img src="{% static 'images/us.svg' %}"
+                                width=30 height=30 />
+                                {%endif%}
+                                
                             </a>
                         </li>
                         {% else %}
                         <li class="nav-item">
                             <a href="{% url 'login' %}" class="nav-link">
+                                {%if user.language_pref_fr %}
+                                Connexion
+                                {%else%}
                                 Log in
+                                {%endif%}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'sign in' %}" class="nav-link">
+                                {%if user.language_pref_fr %}
+                                S'inscrire
+                                {%else%}
                                 Sign up
+                                {%endif%}
                             </a>
                         </li>
                         {% endif %}
-                        <li class="nav-item">
-                            <a href="{% url 'main' %}" class="nav-link">
-                                Language <img src="{% static 'images/us.svg' %}"
-                                width=30 height=30 />
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -89,14 +124,25 @@
 
             {% if success_message %}
             <div class="alert alert-success alert-dismissible fade show">
-                <strong>Success !</strong> {{success_message}}
+                <strong>
+                    {%if user.language_pref_fr %}
+                    Succès !
+                    {%else%}
+                    Success !
+                    {%endif%}</strong> {{success_message}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             {% endif %}
 
             {% if error_message %}
             <div class="alert alert-danger alert-dismissible fade show">
-                <strong>Error !</strong> {{ error_message }}
+                <strong>
+                    {%if user.language_pref_fr %}
+                    Erreur !
+                    {%else%}
+                    Error !
+                    {%endif%}</strong> {{success_message}}
+                </strong> {{ error_message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             {% endif %}

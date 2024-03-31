@@ -53,6 +53,3 @@ def init_datas():
                 game.genre.add(genre)
         except:
             pass
-
-
-init_datas()

@@ -100,6 +100,89 @@
         padding: 5px;
         font-size: 12px;
     }
+
+       .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr; /* Three equal-width columns */
+        grid-template-rows: auto auto; /* Two rows with automatic height */
+        gap: 10px; /* Gap between grid items */
+    }
+
+    .grid-item {
+        padding-left:3%;
+    }
+
+    /* First row items will stretch to the same height */
+    .grid-item:nth-child(-n+3) {
+        grid-row: 1; /* Place items in the first row */
+    }
+
+    .grid-item:first-child {
+        text-align: left;
+    }
+
+    .input-container {
+        width: 220px;
+        position: relative;
+      }
+      
+      .icon {
+        position: absolute;
+        right: 10px;
+        top: calc(50% + 5px);
+        transform: translateY(calc(-50% - 5px));
+      }
+      
+      .input {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        transition: .2s linear;
+        border: 2.5px solid black;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      
+      .input:focus {
+        outline: none;
+        border: 0.5px solid black;
+        box-shadow: -5px -5px 0px black;
+      }
+      
+      .input-container:hover > .icon {
+        animation: anim 1s linear infinite;
+      }
+      
+      @keyframes anim {
+        0%,
+        100% {
+          transform: translateY(calc(-50% - 5px)) scale(1);
+        }
+      
+        50% {
+          transform: translateY(calc(-50% - 5px)) scale(1.1);
+        }
+      }
+
+      .group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%; /* Ensure the group fills the entire grid item */
+        width: 100%;
+    }
+
+    .btn.pretty-button {
+        background: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+    
+      .btn.pretty-button:hover {
+        background-color: lightgray;
+      }
+
 </style>
 
 <script>
@@ -148,90 +231,142 @@
             });
         });
     });
-    
 
 </script>
 
-<div class="container-lg content-container">
-    <h1 style="text-align:center;">Our games</h1>
+    <div class="container-lg content-container">
+        <h1 style="text-align:center;">Our games</h1>
+
+    <form class="container-lg content-container" style="text-align:center;" action="{% url 'games' %}" method="post">
+
+        <div class="grid-container">
+
+            <div class="grid-item" style="height:200px;">
+            <div style="text-align:center;">Categories:</div>
+            </br>
+            <div style="overflow-y:scroll;height:100%;align-items:left;">
+                {{form.visible_fields.4}}
+            </div>
+            </br>
+            </div>
+
+            <div class="grid-item">
+            Game duration (in min):
+            </br>
+            </br>   
+            <p>Min: {{form.visible_fields.0}}</p>
+            <p>Max: {{form.visible_fields.1}}</p>
+            </div>
+            
+            <div class="grid-item">
+            Number of players:
+            </br>
+            </br>   
+            <p>Min: {{form.visible_fields.2}}</p>
+            <p>Max: {{form.visible_fields.3}}</p>
+        </div>
+
+            <div class="grid-item"></div>
+            <div class="grid-item">
+                <div class="group">
+                    <div class="input-container">
+                        <input type="text" name="Search text" class="input" placeholder="search..." value="{{search}}">
+                    </div>
+                    <button class="btn pretty-button" type="submit">🔎</buton>
+                </div>
+                
+            </div>
+            <div class="grid-item"></div>
+
+        </div>
+
+
+    </form>
+
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6">
         {% for element in elements %}
-
-        <div>
-            <div class="card-body ratio ratio-1x1">
-                <img class="card-img-top" src={{ element.game.image }}>
-            </div>
-
-            <div class="heart-container" style="bottom:calc(-53%);" title="Like">
-                {% if user.is_authenticated %}
-                {% if element.is_favorite %}
-                <input type="checkbox" class="checkbox" id="{{ element.game.name }}" name="{{ element.game.name }}" value="{{ element.game.favorites.count }}" checked/>
-                {% else %}
-                <input type="checkbox" class="checkbox" id="{{ element.game.name }}" name="{{ element.game.name }}" value="{{ element.game.favorites.count }}"/>
-                {% endif %}
+        <div class="col">
+            <div class="card mb-3" style="height: 90%;width:100%; position: relative;">
                 
-                <div class="svg-container">
-                    <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
-                        </path>
-                    </svg>
-                    <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
-                        </path>
-                    </svg>
-                    <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                        <polygon points="10,10 20,20"></polygon>
-                        <polygon points="10,50 20,50"></polygon>
-                        <polygon points="20,80 30,70"></polygon>
-                        <polygon points="90,10 80,20"></polygon>
-                        <polygon points="90,50 80,50"></polygon>
-                        <polygon points="80,80 70,70"></polygon>
-                    </svg>
-                    <div class="like-count">{{ element.game.favorites.count }}</div>
-                </div>
-            {% else %}
-            <div class="svg-container">
-                <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
-                    </path>
-                </svg>
-            </div>
-            <div class="like-count">{{ element.game.favorites.count }}</div>
-            {% endif %}
-        </div>
+                <div class="card-body" style="height:550px;margin:0; border:0; padding:0;border: 2px solid #000000;">
 
-            <div class="card-body" style="border: 2px solid #000000; height:300px;">
-                <h5 class="normal-text card-title classic-text"><font size="-0.5">{{ element.game.name }}
-                    </br>
-                    <div>
-                        {% if element.not_available %}
-                        (NOT AVAILABLE)
-                        {%else%}
-                        (AVAILABLE)
-                        {%endif%}
+
+                    <div class="ratio ratio-1x1" style="width:100%;">
+                        <img class="card-img-top; margin:0; border:0; padding:0;" src="{{ element.game.image }}"/>
                     </div>
-                </font></h5>
-                
-                <div style="font-size:15px; text-align:justify;">
-                    🔳 {{element.genre1}} {{element.genre2}} {{element.genre3}} 
-                </div>
+                    
+                    <div class="card-body">
+                        <h5 class="normal-text card-title classic-text" style="top:0;">
+                            <font size="-0.5">{{ element.game.name }}</font>
+                            <br>
+                                {% if element.not_available %}
+                                <div style="font-size:15px; margin-top:10px;">
+                                (NOT AVAILABLE)
+                                {% else %}
+                                <div style="font-size:10px; margin-top:10px;">
+                                (AVAILABLE)
+                                {% endif %}
+                            </div>
+                        </h5>
+                        <div style="font-size:15px;">
+                            ⏲️ {{ element.game.duration }}
+                        </div>
+                        <div style="font-size:15px;">
+                            ♟️ {{ element.game.player_number_min }} to {{ element.game.player_number_max }}
+                        </div>
+                        <div style="font-size:15px;">
+                            🔳 {{ element.genre1 }} 
+                            {{element.genre2}}
+                        </div>
+                    </br>
+                        <div style="font-size:15px; width:100%; overflow-y: auto;">
+                            {{ element.game.description_en }}
+                        </div>
+                    </div>
 
-                <div style="font-size:15px;">
-                ⏲️ {{element.game.duration}} min
-                </div>
-                <div style="font-size:15px;">
-                    ♟️ {{element.game.player_number_min}} to {{element.game.player_number_max}}
-                </div>
-                
-                </br>            
+                    <div class="heart-container" title="Like" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
+                        {% if user.is_authenticated %}
+                        {% if element.is_favorite %}
+                        <input type="checkbox" class="checkbox" id="{{ element.game.name }}" name="{{ element.game.name }}" value="{{ element.game.favorites.count }}" checked/>
+                        {% else %}
+                        <input type="checkbox" class="checkbox" id="{{ element.game.name }}" name="{{ element.game.name }}" value="{{ element.game.favorites.count }}"/>
+                        {% endif %}
+                        <div class="svg-container">
+                            <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z">
+                                </path>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
+                                </path>
+                            </svg>
+                            <svg class="svg-celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="10,10 20,20"></polygon>
+                                <polygon points="10,50 20,50"></polygon>
+                                <polygon points="20,80 30,70"></polygon>
+                                <polygon points="90,10 80,20"></polygon>
+                                <polygon points="90,50 80,50"></polygon>
+                                <polygon points="80,80 70,70"></polygon>
+                            </svg>
+                            <div class="like-count">{{ element.game.favorites.count }}</div>
+                        </div>
+                        {% else %}
+                        <div class="svg-container">
+                            <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="like-count">{{ element.game.favorites.count }}</div>
+                        {% endif %}
+                    </div>
 
-                <div style="font-size:15px; width:calc(100%);">
-                    {{element.game.description_en}}
                 </div>
-
+            </div>
         </div>
+
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 {% endblock %}

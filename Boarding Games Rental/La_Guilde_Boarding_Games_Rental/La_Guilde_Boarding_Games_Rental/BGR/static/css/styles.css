@@ -42,8 +42,9 @@ a.nav-link:hover {
 .card {
     margin-bottom: 4px;
     margin-top: 4px;
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-left: 0px;
+    margin-right: 0px;
+    height: 500px;
 }
 
 p.textbox {

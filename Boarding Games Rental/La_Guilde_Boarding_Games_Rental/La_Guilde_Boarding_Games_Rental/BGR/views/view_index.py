@@ -23,32 +23,58 @@ def index(request):
             game.favorites.add(request.user)
             game.save()
 
-    games = Game.objects.filter(new=True)
+    games = list(Game.objects.filter(new=True))
+    games.sort(key=lambda x: -len(x.favorites.all()))
     dico = []
     for game in games:
         genres = list(game.genre.all())
         infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
             game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
         if len(genres) >= 2:
-            infos["genre2"] = genres[1]
+            infos["genre2"] = " / " + genres[1].name
             if len(genres) >= 3:
-                infos["genre3"] = genres[2]
+                infos["genre3"] = " / " + genres[2].name
         dico.append(infos)
     return render(request, "index.html", context={"elements": dico})
 
 
 def disconnect(request):
+    games = list(Game.objects.filter(new=True))
+    games.sort(key=lambda x: -len(x.favorites.all()))
+    dico = []
+    for game in games:
+        genres = list(game.genre.all())
+        infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+            game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+        if len(genres) >= 2:
+            infos["genre2"] = " / " + genres[1].name
+            if len(genres) >= 3:
+                infos["genre3"] = " / " + genres[2].name
+        dico.append(infos)
+    context = {"elements": dico}
     try:
         logout(request)
-        context = {"success_message": "Successfully logged out"}
+        context["success_message"] = "Successfully logged out"
     except:
-        context = {"error_message": "Fail to log out"}
+        context["error_message"] = "Fail to log out"
     return render(request, "index.html", context=context)
 
 
 def create_account(request):
     if request.user.is_authenticated:
-        return render(request, "index.html", context={"success_message": "You are logged in"})
+        games = list(Game.objects.filter(new=True))
+        games.sort(key=lambda x: -len(x.favorites.all()))
+        dico = []
+        for game in games:
+            genres = list(game.genre.all())
+            infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+            if len(genres) >= 2:
+                infos["genre2"] = " / " + genres[1].name
+                if len(genres) >= 3:
+                    infos["genre3"] = " / " + genres[2].name
+            dico.append(infos)
+        return render(request, "index.html", context={"elements": dico, "success_message": "You are logged in"})
     if request.method == "POST":
 
         if request.POST["password"] != request.POST["confirm_password"]:
@@ -89,13 +115,37 @@ def create_account(request):
 
 def connect(request):
     if request.user.is_authenticated:
-        return render(request, "index.html", context={"success_message": "You are logged in"})
+        games = list(Game.objects.filter(new=True))
+        games.sort(key=lambda x: -len(x.favorites.all()))
+        dico = []
+        for game in games:
+            genres = list(game.genre.all())
+            infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+            if len(genres) >= 2:
+                infos["genre2"] = " / " + genres[1].name
+                if len(genres) >= 3:
+                    infos["genre3"] = " / " + genres[2].name
+            dico.append(infos)
+        return render(request, "index.html", context={"elements": dico, "success_message": "You are logged in"})
     if request.method == "POST":
         user = authenticate(
             username=request.POST['email'], password=request.POST['password'])
         if user is not None:
             login(request, user)
-            return render(request, "index.html", context={"success_message": "Successfully logged in"})
+            games = list(Game.objects.filter(new=True))
+            games.sort(key=lambda x: -len(x.favorites.all()))
+            dico = []
+            for game in games:
+                genres = list(game.genre.all())
+                infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                    game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+                if len(genres) >= 2:
+                    infos["genre2"] = " / " + genres[1].name
+                    if len(genres) >= 3:
+                        infos["genre3"] = " / " + genres[2].name
+                dico.append(infos)
+            return render(request, "index.html", context={"elements": dico, "success_message": "Successfully logged in"})
         else:
             return render(request, "log.html", context={"error_message": "Your email or password is wrong", "email": request.POST['email'], "password": request.POST['password']})
     else:
@@ -123,9 +173,35 @@ def verify_email(request):
         User = get_user_model()
         user = User.objects.create_user(email, password)
         login(request, user)
-        return render(request, "index.html", context={"success_message": "You have successfully verified your email"})
+        command = Command(commander=user)
+        command.save()
+        games = list(Game.objects.filter(new=True))
+        games.sort(key=lambda x: -len(x.favorites.all()))
+        dico = []
+        for game in games:
+            genres = list(game.genre.all())
+            infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+            if len(genres) >= 2:
+                infos["genre2"] = " / " + genres[1].name
+                if len(genres) >= 3:
+                    infos["genre3"] = " / " + genres[2].name
+            dico.append(infos)
+        return render(request, "index.html", context={"elements": dico, "success_message": "You have successfully verified your email"})
     else:
-        return render(request, "index.html")
+        games = list(Game.objects.filter(new=True))
+        games.sort(key=lambda x: -len(x.favorites.all()))
+        dico = []
+        for game in games:
+            genres = list(game.genre.all())
+            infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+            if len(genres) >= 2:
+                infos["genre2"] = " / " + genres[1].name
+                if len(genres) >= 3:
+                    infos["genre3"] = " / " + genres[2].name
+            dico.append(infos)
+        return render(request, "index.html", context={"elements": dico})
 
 
 def reset(request):
@@ -189,23 +265,80 @@ def confirm_reset(request):
         user = User.objects.get(email=email)
         user.set_password(password)
         user.save()
-        return render(request, "index.html", context={"success_message": "Password successfully changed"})
-    return render(request, "index.html", context={})
+        games = list(Game.objects.filter(new=True))
+        games.sort(key=lambda x: -len(x.favorites.all()))
+        dico = []
+        for game in games:
+            genres = list(game.genre.all())
+            infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+            if len(genres) >= 2:
+                infos["genre2"] = " / " + genres[1].name
+                if len(genres) >= 3:
+                    infos["genre3"] = " / " + genres[2].name
+            dico.append(infos)
+        return render(request, "index.html", context={"elements": dico, "success_message": "Password successfully changed"})
+    games = list(Game.objects.filter(new=True))
+    games.sort(key=lambda x: -len(x.favorites.all()))
+    dico = []
+    for game in games:
+        genres = list(game.genre.all())
+        infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+            game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+        if len(genres) >= 2:
+            infos["genre2"] = " / " + genres[1].name
+            if len(genres) >= 3:
+                infos["genre3"] = " / " + genres[2].name
+        dico.append(infos)
+    return render(request, "index.html", context={"elements": dico})
 
 
 def reset_password(request):
     if request.method == "POST":
-        return render(request, "index.html", context={})
-    return render(request, "index.html", context={})
+        games = list(Game.objects.filter(new=True))
+        games.sort(key=lambda x: -len(x.favorites.all()))
+        dico = []
+        for game in games:
+            genres = list(game.genre.all())
+            infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+                game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+            if len(genres) >= 2:
+                infos["genre2"] = " / " + genres[1].name
+                if len(genres) >= 3:
+                    infos["genre3"] = " / " + genres[2].name
+            dico.append(infos)
+        return render(request, "index.html", context={"elements": dico})
+
+    games = list(Game.objects.filter(new=True))
+    games.sort(key=lambda x: -len(x.favorites.all()))
+    dico = []
+    for game in games:
+        genres = list(game.genre.all())
+        infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+            game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+        if len(genres) >= 2:
+            infos["genre2"] = " / " + genres[1].name
+            if len(genres) >= 3:
+                infos["genre3"] = " / " + genres[2].name
+        dico.append(infos)
+    return render(request, "index.html", context={"elements": dico})
 
 
-@csrf_exempt
-def test(request):
-    if request.method == "POST":
-        print(request.POST)
-        return render(request, "test.html")
-    return render(request, "test.html")
+def change_language(request):
+    if request.user.is_authenticated:
+        request.user.language_pref_fr = not (request.user.language_pref_fr)
+        request.user.save()
 
-
-def test2(request):
-    return render(request, "test2.html")
+    games = list(Game.objects.filter(new=True))
+    games.sort(key=lambda x: -len(x.favorites.all()))
+    dico = []
+    for game in games:
+        genres = list(game.genre.all())
+        infos = {"game": game, "not_available": (game.quantity <= 0), "is_favorite": len(
+            game.favorites.filter(email=request.user)) == 1, "genre1": genres[0]}
+        if len(genres) >= 2:
+            infos["genre2"] = " / " + genres[1].name
+            if len(genres) >= 3:
+                infos["genre3"] = " / " + genres[2].name
+        dico.append(infos)
+    return render(request, "index.html", context={"elements": dico})

@@ -20,6 +20,12 @@
     bottom: 10px;
     right: 10px;
   }
+
+  .sign-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
 </style>
 
 <div class="container-lg content-container classic-text">
@@ -43,6 +49,7 @@
   </br>
 </br>
     <a style="width:100px; font-size:12px;" class="btn pretty-button forgot-password-btn" href="{% url 'reset' %}">Forgot/Change password</a>
+    <a style="width:100px; font-size:12px;" class="btn pretty-button sign-btn" href="{% url 'sign in' %}">Sign up</a>
   </div>
 </div>
 
