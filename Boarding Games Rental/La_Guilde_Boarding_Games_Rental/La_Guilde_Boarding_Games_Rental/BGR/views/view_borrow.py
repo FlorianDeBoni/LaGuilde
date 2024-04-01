@@ -12,14 +12,19 @@ def add_fav_command(request):
     if request.user.is_authenticated:
         command = Command.objects.get(commander=request.user)
         init = {}
-        context = {
-            "success_message": "Successfully added to your favorites commands."}
+        if request.user.is_authenticated and request.user.language_pref_fr:
+            context = {
+                "success_message": "Ajouté à vos commandes favorites avec succès"}
+        else:
+            context = {
+                "success_message": "Successfully added to your favorites commands"}
         command = Command.objects.get(commander=request.user)
         init["games"] = command.games.all()
         init["datestart"] = command.start_date
         init["dateend"] = command.end_date
         init["infos"] = request.user.contact
-        form = CommandForm(initial=init)
+        form = CommandForm(initial=init, language=(
+            request.user.is_authenticated and request.user.language_pref_fr))
         context["games"] = []
         games = list(command.games.all())
 
@@ -30,7 +35,12 @@ def add_fav_command(request):
 
         res = []
         for game in games:
-            instance = CommandForm(initial_game=(game, game))
+            if request.user.language_pref_fr:
+                initial_game = (game, game)
+            else:
+                initial_game = (game.name_en, game)
+            instance = CommandForm(initial_game=initial_game, language=(
+                request.user.is_authenticated and request.user.language_pref_fr))
             res.append(instance)
         context["games"] = res
         context["form"] = form
@@ -65,7 +75,8 @@ def borrowform(request):
         init["datestart"] = command.start_date
         init["dateend"] = command.end_date
         init["infos"] = request.user.contact
-        form = CommandForm(initial=init)
+        form = CommandForm(initial=init, language=(
+            request.user.is_authenticated and request.user.language_pref_fr))
         context = {}
 
         if request.method == "POST":
@@ -80,7 +91,8 @@ def borrowform(request):
             command.end_date = post_request["dateend"]
             request.user.contact = post_request["infos"]
             request.user.save()
-            form = CommandForm(post_request)
+            form = CommandForm(post_request, language=(
+                request.user.is_authenticated and request.user.language_pref_fr))
             res = not (command.is_active)
             for game in games:
                 if game.quantity <= 0:
@@ -88,8 +100,12 @@ def borrowform(request):
                     pb = game
                     break
             if command.is_active:
-                context = {
-                    "error_message": "You must give your previous order back first."}
+                if request.user.is_authenticated and request.user.language_pref_fr:
+                    context = {
+                        "error_message": "Tu dois d'abord rendre ta commande en cours"}
+                else:
+                    context = {
+                        "error_message": "You must give your previous order back first"}
             elif res and not (command.is_active):
                 message = "From " + command.commander.email + "\n"
                 message += "Start "+command.end_date+". End "+command.start_date+".\n"
@@ -98,16 +114,22 @@ def borrowform(request):
                     message += "- " + game.name + "\n"
                 if request.user.contact != "":
                     info = request.user.contact
-                    message = message + "Here are some extra informations:" + \
+                    message = message + "\n" + "Here are some extra informations:" + \
                         "\n" + info
                 if (command.wait):
                     id = str(command.message_id)
                     message = "Command n°"+id+"\n"+message
-                    context = {"success_message": "Command updated"}
+                    if request.user.is_authenticated and request.user.language_pref_fr:
+                        context = {"success_message": "Commande mise à jour"}
+                    else:
+                        context = {"success_message": "Command updated"}
                     edit_message(message, command.message_id)
                     command.save()
                 else:
-                    context = {"success_message": "Command sent"}
+                    if request.user.is_authenticated and request.user.language_pref_fr:
+                        context = {"success_message": "Commande envoyée"}
+                    else:
+                        context = {"success_message": "Command sent"}
                     command.wait = True
                     command.message_id = send_message(message)
                     command.save()
@@ -115,12 +137,21 @@ def borrowform(request):
                     message = "Command n°"+id+"\n"+message
                     edit_message(message, command.message_id)
             else:
-                context = {"error_message": pb.name+"is not available"}
+                if request.user.is_authenticated and request.user.language_pref_fr:
+                    context = {"error_message": pb.name +
+                               " n'est pas disponible"}
+                else:
+                    context = {"error_message": pb.name_en+" is not available"}
         context["games"] = []
         games = list(games)
         res = []
         for game in games:
-            instance = CommandForm(initial_game=(game, game))
+            if request.user.language_pref_fr:
+                initial_game = (game, game)
+            else:
+                initial_game = (game.name_en, game)
+            instance = CommandForm(initial_game=initial_game, language=(
+                request.user.is_authenticated and request.user.language_pref_fr))
             res.append(instance)
 
         context["games"] = res
@@ -156,21 +187,33 @@ def delete(request):
             command.is_active = False
             command.save()
             delete_message(command.message_id)
-            context = {"success_message": "Command canceled"}
+            if request.user.is_authenticated and request.user.language_pref_fr:
+                context = {"success_message": "Commande annulée"}
+            else:
+                context = {"success_message": "Command canceled"}
         else:
-            context = {"error_message": "Nothing to cancel"}
+            if request.user.is_authenticated and request.user.language_pref_fr:
+                context = {"error_message": "Rien à annuler"}
+            else:
+                context = {"error_message": "Nothing to cancel"}
         init = {}
         command = Command.objects.get(commander=request.user)
         init["games"] = command.games.all()
         init["datestart"] = command.start_date
         init["dateend"] = command.end_date
         init["infos"] = request.user.contact
-        form = CommandForm(initial=init)
+        form = CommandForm(initial=init, language=(
+            request.user.is_authenticated and request.user.language_pref_fr))
         context["games"] = []
         games = list(command.games.all())
         res = []
         for game in games:
-            instance = CommandForm(initial_game=(game, game))
+            if request.user.language_pref_fr:
+                initial_game = (game, game)
+            else:
+                initial_game = (game.name_en, game)
+            instance = CommandForm(initial_game=initial_game, language=(
+                request.user.is_authenticated and request.user.language_pref_fr))
             res.append(instance)
 
         context["games"] = res

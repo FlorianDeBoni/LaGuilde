@@ -42,6 +42,7 @@ def init_datas():
             categories = [Genre.objects.get(name=name)
                           for name in row["Category"].split(', ')]
             game = Game(name=name,
+                        name_en=name,
                         description_en="Description of "+name,
                         description_fr="Description de "+name,
                         quantity=quantity,

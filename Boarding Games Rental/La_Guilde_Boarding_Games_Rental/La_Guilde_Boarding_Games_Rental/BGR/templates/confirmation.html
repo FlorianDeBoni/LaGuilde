@@ -1,8 +1,52 @@
 {% extends "base_generic.html" %} {% block content %}
 
+{%if user.language_pref_fr %}
+
 <div class="container-lg content-container classic-text">
-    <h1>An email has been sent to {{email}}</h1>
-    <h3>Please check your mails and enter the 4 digits password you received:</h3>
+  <h1>An email has been sent to {{email}}</h1>
+  <h3>Please check your mails and enter the 4 digits password you received:</h3>
+</br>
+<form action="{% url 'confirm_email' %}" style="font-size:45px;" method="post">
+  {% csrf_token %}
+  <input name="email" type="hidden" value="{{email}}">
+  <input name="password" type="hidden" value="{{password}}">
+
+  <input name="code1" min="0" max="9" maxlength="1" type="hidden" value="{{code1}}">
+  <input name="code2" type="hidden" value="{{code2}}">
+  <input name="code3" type="hidden" value="{{code3}}">
+  <input name="code4" type="hidden" value="{{code4}}">
+
+  <input name="Entry1" inputmode="numeric" type="text" style="width:35px; font-size: 50px;" placeholder="0" maxlength="1" value="{{Entry1}}" oninput="validateNumericInput(this, 'Entry2')" required/>
+  -
+  <input name="Entry2" inputmode="numeric" type="text" style="width:35px; font-size: 50px;" placeholder="0" maxlength="1" value="{{Entry2}}" oninput="validateNumericInput(this, 'Entry3')" required/>
+  -
+  <input name="Entry3" inputmode="numeric" type="text" style="width:35px; font-size: 50px;" placeholder="0" maxlength="1" value="{{Entry3}}" oninput="validateNumericInput(this, 'Entry4')" required/>
+  -
+  <input name="Entry4" inputmode="numeric" type="text" style="width:35px; font-size: 50px;" placeholder="0" maxlength="1" value="{{Entry4}}" oninput="validateNumericInput(this, null)" required/>
+  
+  <script>
+      function validateNumericInput(input, nextField) {
+        // Remove non-numeric characters
+        input.value = input.value.replace(/\D/g, '');
+        
+        // Move to the next field if input is valid
+        if (input.value.length > 0 && nextField) {
+          document.getElementsByName(nextField)[0].focus();
+        }
+      }
+  </script>
+  
+  <br>
+  <button class="btn pretty-button" type="submit">Verify</button>
+</form>
+</div>
+
+{%else%}
+
+
+<div class="container-lg content-container classic-text">
+    <h1>Un email a été envoyé à {{email}}</h1>
+    <h3>Merci de consulter votre mail et de rentrer le code à 4 chiffres:</h3>
 </br>
 <form action="{% url 'confirm_email' %}" style="font-size:45px;" method="post">
     {% csrf_token %}
@@ -35,8 +79,10 @@
     </script>
     
     <br>
-    <button class="btn pretty-button" type="submit">Verify</button>
+    <button class="btn pretty-button" type="submit">Verifier</button>
 </form>
 </div>
+
+{%endif%}
 
 {% endblock %}

@@ -17,7 +17,8 @@ def view_games(request):
     games.sort(key=lambda x: -len(x.favorites.all()))
     search_text = ""
 
-    form = SearchForm()
+    form = SearchForm(language=(
+        request.user.is_authenticated and request.user.language_pref_fr))
     if request.method == "POST":
         post_request = request.POST
         if 'is_checked' in post_request:
@@ -29,7 +30,8 @@ def view_games(request):
                 game.favorites.add(request.user)
                 game.save()
         else:
-            form = SearchForm(request.POST)
+            form = SearchForm(request.POST, language=(
+                request.user.is_authenticated and request.user.language_pref_fr))
 
             post_request = request.POST
             tmin = 0
@@ -65,7 +67,7 @@ def view_games(request):
                         res.append(game)
             games = res
             if search_text != "":
-                games = find_closest_names(search_text, games)
+                games = find_closest_names(search_text, games, request)
 
     dico = []
     for game in games:
@@ -80,10 +82,14 @@ def view_games(request):
     return render(request, "games.html", context={"elements": dico, "form": form, "search": search_text})
 
 
-def find_closest_names(input_text, games):
+def find_closest_names(input_text, games, request):
     input_text = input_text.lower()
-    distances = [(game.name, Levenshtein.distance(input_text, game.name.lower()))
-                 for game in games]
+    if request.user.is_authenticated and request.user.language_pref_fr:
+        distances = [(game.name, Levenshtein.distance(input_text, game.name.lower()))
+                     for game in games]
+    else:
+        distances = [(game.name_en, Levenshtein.distance(input_text, game.name_en.lower()))
+                     for game in games]
     distances.sort(key=lambda x: x[1])
     closest_names = [name for name, _ in distances]
     closest_games = [Game.objects.get(name=name) for name in closest_names]

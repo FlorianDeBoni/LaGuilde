@@ -28,6 +28,35 @@
   }
 </style>
 
+{%if user.language_pref_fr %}
+
+<div class="container-lg content-container classic-text">
+  <h1>Merci de vous connecter à votre compte:</h1>
+  <div class="content-container" style="width:calc(70%); position: relative;display: flex;flex-direction: column; align-items: center;">
+    <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+        <div class="coolinput">
+          <label for="email" style="margin-right: calc(75%);" class="text">Email:</label>
+          <input type="email" style="width:calc(80%); margin-right:calc(20%);" class="input" id="email" name="email" placeholder="truc@exemple.com" size="30" min="10" max="100" value="{{email}}" style="width: calc(100%);" required />
+        </div>
+        <div class="coolinput">
+          <label for="password" style="margin-right: calc(65%);" class="text">Mot de passe:</label>
+          <input type="password" style="width:calc(80%);" class="input" id="password" name="password" placeholder="Longueur entre 5 et 20" minlength="5" maxlength="20" value="{{password}}" required/>
+          {% load static %}
+          <img id="eye" class="eye-icon" onclick="togglePasswordVisibility()" src="{% static 'images/invisible.png'%}" width=40 height=40/>
+        </div>
+      <br>
+      <button class="btn pretty-button" type="submit"> Connexion </button>
+    </form>
+  </br>
+</br>
+    <a class="btn pretty-button forgot-password-btn" href="{% url 'reset' %}">Mot de passe oublié/changer</a>
+    <a class="btn pretty-button sign-btn" href="{% url 'sign in' %}"> S'inscrire </a>
+  </div>
+</div>
+
+{% else %}
+
 <div class="container-lg content-container classic-text">
   <h1>Please log in to your account:</h1>
   <div class="content-container" style="width:calc(70%); position: relative;display: flex;flex-direction: column; align-items: center;">
@@ -48,10 +77,12 @@
     </form>
   </br>
 </br>
-    <a style="width:100px; font-size:12px;" class="btn pretty-button forgot-password-btn" href="{% url 'reset' %}">Forgot/Change password</a>
-    <a style="width:100px; font-size:12px;" class="btn pretty-button sign-btn" href="{% url 'sign in' %}">Sign up</a>
+    <a class="btn pretty-button forgot-password-btn" href="{% url 'reset' %}">Forgot/Change password</a>
+    <a class="btn pretty-button sign-btn" href="{% url 'sign in' %}"> Sign up </a>
   </div>
 </div>
+
+{%endif%}
 
 <script>
 function togglePasswordVisibility() {

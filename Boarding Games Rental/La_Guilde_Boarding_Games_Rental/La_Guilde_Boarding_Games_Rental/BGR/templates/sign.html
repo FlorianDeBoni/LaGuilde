@@ -22,6 +22,39 @@
   }
 </style>
 
+{%if user.language_pref_fr %}
+
+<div class="container-lg content-container classic-text">
+  <h1>Création de compte:</h1>
+  <div class="content-container" style="width:calc(70%); position: relative;display: flex;flex-direction: column; align-items: center;">
+    <form action="{% url 'sign in' %}" method="post">
+      {% csrf_token %}
+        <div class="coolinput">
+          <label for="email" style="margin-right: calc(75%);" class="text">Email:</label>
+          <input type="email" style="width:calc(80%); margin-right:calc(20%);" class="input" id="email" name="email" placeholder="truc@exemple.com" size="30" min="10" max="100" value="{{email}}" style="width: calc(100%);" required />
+        </div>
+        <div class="coolinput">
+          <label for="password" style="margin-right: calc(65%);" class="text">Mot de passe:</label>
+          <input type="password" style="width:calc(80%);" class="input" id="password" name="password" placeholder="Longueur entre 5 et 20" minlength="5" maxlength="20" value="{{password}}" required/>
+          {% load static %}
+          <img id="eye" class="eye-icon" onclick="togglePasswordVisibility()" src="{% static 'images/invisible.png'%}" width=40 height=40/>
+        </div>
+        <div class="coolinput">
+          <label for="confirm_password" style="margin-right: calc(70%);" class="text">Confirmer:</label>
+          <input type="password" style="width:calc(80%);" class="input" id="confirm_password" name="confirm_password" placeholder="Longueur entre 5 et 20" minlength="5" maxlength="20" value="{{confirm_password}}" required/>
+          {% load static %}
+          <img id="confirm_eye" class="eye-icon" onclick="togglePasswordVisibility2()" src="{% static 'images/invisible.png'%}" width=40 height=40/>
+        </div>
+      <br>
+      <button class="btn pretty-button" type="submit" onclick="return confirm('Les informations sont-elles correctes ?')"> Créer un compte </button>
+    </form>
+  </br>
+</br>
+</div>
+</div>
+
+{%else%}
+
 <div class="container-lg content-container classic-text">
   <h1>Please create an account:</h1>
   <div class="content-container" style="width:calc(70%); position: relative;display: flex;flex-direction: column; align-items: center;">
@@ -50,6 +83,8 @@
 </br>
 </div>
 </div>
+
+{%endif%}
 
 <script>
 function togglePasswordVisibility() {
