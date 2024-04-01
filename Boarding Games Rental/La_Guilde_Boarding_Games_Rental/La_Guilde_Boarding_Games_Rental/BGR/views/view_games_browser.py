@@ -82,14 +82,21 @@ def view_games(request):
     return render(request, "games.html", context={"elements": dico, "form": form, "search": search_text})
 
 
+def sort_by_alphabetic(input_text):
+    return ''.join(sorted(input_text))
+
+
 def find_closest_names(input_text, games, request):
-    input_text = input_text.lower()
+    input_text_normalized = input_text.lower().replace(" ", "")
+    sorted_input_text = sort_by_alphabetic(input_text_normalized)
+
     if request.user.is_authenticated and request.user.language_pref_fr:
-        distances = [(game.name, Levenshtein.distance(input_text, game.name.lower()))
+        distances = [(game.name, Levenshtein.distance(sorted_input_text, sort_by_alphabetic(game.name.lower().replace(" ", ""))))
                      for game in games]
     else:
-        distances = [(game.name_en, Levenshtein.distance(input_text, game.name_en.lower()))
+        distances = [(game.name_en, Levenshtein.distance(sorted_input_text, sort_by_alphabetic(game.name_en.lower().replace(" ", ""))))
                      for game in games]
+
     distances.sort(key=lambda x: x[1])
     closest_names = [name for name, _ in distances]
     closest_games = [Game.objects.get(name=name) for name in closest_names]

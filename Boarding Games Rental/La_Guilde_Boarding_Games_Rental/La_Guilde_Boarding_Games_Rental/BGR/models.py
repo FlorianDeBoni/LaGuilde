@@ -50,8 +50,8 @@ class Game(models.Model):
     duration = models.CharField(max_length=10,
                                 help_text="Average game duration in minutes (x-x min)")
     favorites = models.ManyToManyField(User, blank=True, help_text="Genres")
-    image = models.ImageField(default='media/logo.png',
-                              upload_to='media/', help_text="Illustration (please use 1:1 aspect ratio for better results)")
+    image = models.ImageField(
+        default='media/logo.png', upload_to='media/', help_text="Illustration (please use 1:1 aspect ratio for better results)")
     new = models.BooleanField(
         blank=True, default=False, help_text="Is a new game")
     player_number_max = models.IntegerField(
@@ -61,6 +61,9 @@ class Game(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["name"]
 
 
 class Command(models.Model):
