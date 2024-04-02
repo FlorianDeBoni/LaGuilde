@@ -68,6 +68,8 @@ def view_games(request):
             games = res
             if search_text != "":
                 games = find_closest_names(search_text, games, request)
+            else:
+                games.sort(key=lambda x: -len(x.favorites.all()))
 
     dico = []
     for game in games:

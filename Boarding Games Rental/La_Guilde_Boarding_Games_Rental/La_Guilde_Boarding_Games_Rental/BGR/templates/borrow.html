@@ -92,16 +92,17 @@
         <a href="{% url 'fav' %}">
             <button type="button" class="btn pretty-button">Add current command to favorites</button>
         </a>
-        {%else%}
-            Borrow
-        </button>
-        {% endif %}
-        
         {% if is_active %}
+        {% else %}
         <a href="{% url 'delete' %}">
             <button type="button" class="btn pretty-button">Cancel</button>
         </a>
         {%endif%}
+
+        {%else%}
+            Borrow
+        </button>
+        {% endif %}
     </form>
 </div>
 

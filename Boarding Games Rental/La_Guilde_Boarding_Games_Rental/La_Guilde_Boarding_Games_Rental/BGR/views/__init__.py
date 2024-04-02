@@ -1,6 +1,12 @@
 from .initData import init_datas
 
-try:
-    init_datas()
-except:
-    pass
+
+def main():
+    try:
+        init_datas()
+    except:
+        pass
+
+
+if __name__ == "__main__":
+    main()

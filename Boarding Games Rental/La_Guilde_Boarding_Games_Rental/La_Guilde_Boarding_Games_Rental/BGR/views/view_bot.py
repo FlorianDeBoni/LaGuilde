@@ -23,11 +23,6 @@ def delete_message(message_id):
     url = f"https://api.telegram.org/bot{TOKEN}/DeleteMessage?chat_id={chat_id}&message_id={message_id}"
     requests.get(url)
 
-# message_id = send_message("Message\nrl")
-# print(message_id)
-# edit_message("Editons", message_id)
-# delete_message(message_id)
-
 
 @bot.message_handler(commands=['help'])
 def help(message):
@@ -80,4 +75,4 @@ def end(message):
             pass
 
 
-# bot.polling()
+bot.polling()
