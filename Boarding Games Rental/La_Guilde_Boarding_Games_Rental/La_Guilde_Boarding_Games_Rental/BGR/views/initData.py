@@ -33,24 +33,23 @@ def init_datas():
                 genre = Genre(name=name, name_en=name)
                 genre.save()
     for index, row in data_dataframe.iterrows():
-        try:
-            name = row["Name"]
-            player1 = int(row["Player1"])
-            player2 = int(row["Player2"])
-            time = row["Time"]
-            quantity = row["Quantity"]
-            categories = [Genre.objects.get(name=name)
-                          for name in row["Category"].split(', ')]
-            game = Game(name=name,
-                        name_en=name,
-                        description_en="Description of "+name,
-                        description_fr="Description de "+name,
-                        quantity=quantity,
-                        duration=time,
-                        player_number_max=player2,
-                        player_number_min=player1)
-            game.save()
-            for genre in categories:
-                game.genre.add(genre)
-        except:
-            pass
+
+        name = row["Name"]
+        player1 = int(row["Player1"])
+        player2 = int(row["Player2"])
+        time = row["Time"]
+        quantity = row["Quantity"]
+        categories = [Genre.objects.get(name=name)
+                      for name in row["Category"].split(', ')]
+        game = Game(name=name,
+                    name_en=name,
+                    description_en="Description of "+name,
+                    description_fr="Description de "+name,
+                    quantity=quantity,
+                    duration=time,
+                    player_number_max=player2,
+                    player_number_min=player1,
+                    image="media/"+name)
+        game.save()
+        for genre in categories:
+            game.genre.add(genre)
